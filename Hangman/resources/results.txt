@@ -1,0 +1,5 @@
+Name: test1
+Result: 
+Has letters
+c , a , t , 
+You guessed the word! The word was: cat
