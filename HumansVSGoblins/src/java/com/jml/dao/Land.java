@@ -62,11 +62,11 @@ public class Land {
 
         HashMap<Object,TreeMap<Integer,Integer>> grid= new HashMap<Object,TreeMap<Integer,Integer>>();
             //10x10 grid for testing
-            for(int i=1; i<=yaxis;i++){
-                for(int e=1; e<=xaxis; e++){
-                    grid.put(setCoords(e,i),null);
-                }
-            }
+//            for(int i=1; i<=yaxis;i++){
+//                for(int e=1; e<=xaxis; e++){
+//                    grid.put(null,setCoords(e,i));
+//                }
+//            }
 //        //null -nothing there
 //        //Obstacle -obstacle like a wall --impl later
 //        //Object - human or goblin
@@ -118,19 +118,19 @@ public class Land {
 
         int length=0;
         for(Map.Entry entry: getGrid().entrySet()) {
-            //System.out.println(entry.getKey().getClass());
+            //System.out.println(entry.getKey());
             if (entry.getKey().getClass().equals(Goblin.class)) {
-                System.out.print(" -G- "+"X:"+getX(entry.getKey())+" Y:"+getY(entry.getKey()));
+                System.out.print(" -G- "+"("+getX(entry.getKey())+" , "+getY(entry.getKey())+")");
             } else if (entry.getKey().getClass().equals(Human.class)) {
-                System.out.print(" -H- "+"X:"+getX(entry.getKey())+" Y:"+getY(entry.getKey()));
+                System.out.print(" -H- "+"("+getX(entry.getKey())+" , "+getY(entry.getKey())+")");
             } else {
                 System.out.print(" "+ entry.getKey() +" ");
             }
-            length++;
-            if (length == 10) {
-                System.out.println();
-                length=0;
-            }
+//            length++;
+//            if (length == 10) {
+//                System.out.println();
+//                length=0;
+//            }
         }
     }
 }

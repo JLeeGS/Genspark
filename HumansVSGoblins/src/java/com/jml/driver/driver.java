@@ -4,16 +4,18 @@ import com.jml.dao.Goblin;
 import com.jml.dao.Human;
 import com.jml.dao.Humanoid;
 import com.jml.dao.Land;
+import com.jml.gui.GridMapImpl;
 import com.jml.services.ActionsImpl;
 import com.jml.services.DropTableImpl;
 
+import java.awt.event.ActionEvent;
 import java.util.*;
-import java.util.stream.*;
 
 public class driver {
     Land land = new Land();
     ActionsImpl actions = new ActionsImpl();
     DropTableImpl dt = new DropTableImpl();
+    GridMapImpl grid=new GridMapImpl();
     private int x = 0, y = 0;
 
     public void setX(int x) {
@@ -40,7 +42,7 @@ public class driver {
 
     public void newGame() {
         //initialize everything
-        setX(10);setY(10);
+        setX(5);setY(5);
         testGame();
     }
 
@@ -61,11 +63,13 @@ public class driver {
         land.initGrid(10,10);
         land.getGrid().put(goblinMinion,land.setCoords(1, 1));
         land.getGrid().put(chefGob,land.setCoords(1, 2));
-        land.getGrid().put(player1,land.setCoords(5, 5));
+        land.getGrid().put(player1,land.setCoords(4, 4));
         //for(Map.Entry<Integer, Humanoid> entry: turnOrder.entrySet()){land.getGrid().put(entry.getValue(), land.setCoords((int)Math.random()*19,(int)Math.random()*19));}
         //initiate turn order
         addToTurnOrder(goblins);
         addToTurnOrder(humans);
+        //set up GUI
+        setGrid();
         //Turn Order
         System.out.println("Turn Order: ");
         turnOrder.forEach((n, m) -> {
@@ -85,11 +89,15 @@ public class driver {
                 System.out.println(n.getKey() + " is Dead");
                 turnOrder.remove(turnOrder.get(n)); //need to get initiative key
                 goblins.remove(n.getKey());
+                //remove from grid
+                grid.removeFromGridLayout(land.getX(n.getKey()), land.getY(n.getKey()));
             });
             humans.entrySet().stream().filter(n -> isDead(n.getValue())).forEach(n -> {
                 System.out.println(n.getKey() + " is Dead");
                 turnOrder.remove(n.getKey());
                 humans.remove(n.getKey());
+                //remove from grid
+                grid.removeFromGridLayout(land.getX(n.getKey()), land.getY(n.getKey()));
             });
             //handles battle end and drops chest
             teamDead();
@@ -117,10 +125,10 @@ public class driver {
                 }
                 String target = scan.next();
                 if (playerAction == 1 /*& canAttack(next, goblins.get(target))*/) {
-                    actions.attack(turn, goblins.get(target));
+                    humanAttack(turn, goblins.get(target));
                 }
             } catch (Exception e) {
-                //e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
@@ -165,33 +173,31 @@ public class driver {
 
     public boolean canAttack(Humanoid attacker, Humanoid attacked){
         //opponent is position getx>=+1 , getx>=+1
-        int xAttacked=land.getX(attacked); int yAttacked=land.getY(attacked);
-        int xAttacker= land.getX(attacker); int yAttacker= land.getY(attacker);
-        if((xAttacked==xAttacker+1)|(yAttacked==yAttacker+1)|(xAttacked==xAttacker-1)|(yAttacked==yAttacker-1)
-                &yAttacked-1!=0&xAttacked-1!=0){ //need to make sure one square apart but not coords 0,0
-            return true;
-        }System.out.println(xAttacked+" "+yAttacked+"\n "+xAttacker+" "+yAttacked);
-        return false;
+        return actions.canAttack(attacker,attacked,land);
     }
 
-    public void humanAttack(HashMap<String, Humanoid> attacker, Humanoid attacked){
-
+    public void humanAttack(Humanoid attacker, Humanoid attacked){
+        actions.attack(attacker, attacked);
     }
 
     public void goblinAttack(HashMap<String, Humanoid> attacker, Humanoid attacked){
         //AI for attacker
-            int hpold=attacked.getHp();
-        if(canAttack(attacker.entrySet().stream().iterator().next().getValue(), attacked)){
-            actions.attack(attacker.entrySet().stream().iterator().next().getValue(),attacked);
-            int hp=attacked.getHp()-hpold;
-            System.out.println(attacker.entrySet().stream().iterator().next().getKey()+" Attacked Human for "+hp+" dmg!");
+        actions.goblinAttack(attacker,attacked,land);
+    }
+
+    public void setGrid(){
+        grid.initGridLayout(getX(),getY());
+        grid.setGridHumanoids(humans, land);
+        grid.setGridHumanoids(goblins, land);
+    }
+
+    public void selectBtn(Humanoid attacker, Humanoid attacked, ActionEvent e){
+        if(e.getSource()==grid.getActionBtn()){
+            humanAttack(attacker, attacked);
         }
-        else{
-           int x=land.getX(attacked)+1;
-           int y=land.getX(attacked);
-           actions.move(land, attacker.entrySet().iterator().next().getValue(), x, y);
-           System.out.println(attacker.entrySet().stream().iterator().next().getKey()+ " is Moving to "+x+" "+y);
+        else if(e.getSource()==grid.getMoveBtn()){
+            if(actions.canAttack(attacker, attacked, land)){
+            }
         }
     }
-//fix canAttack and removal from lists if dies
 }

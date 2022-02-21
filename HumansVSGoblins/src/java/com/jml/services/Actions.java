@@ -15,4 +15,6 @@ public interface Actions {
     public Humanoid equip(Humanoid equipping, Inventory inv, String item);
     public String spell(String type);
     public int cast(Humanoid attacked, Humanoid attacker, String spell);
+    public boolean canAttack(Humanoid attacker, Humanoid attacked, Land land);
+    public void goblinAttack(HashMap<String, Humanoid> attacker, Humanoid attacked, Land land);
 }

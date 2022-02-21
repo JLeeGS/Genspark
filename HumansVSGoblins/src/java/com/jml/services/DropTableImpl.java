@@ -1,7 +1,6 @@
 package com.jml.services;
 
 import com.jml.dao.Humanoid;
-
 import java.util.Random;
 
 public class DropTableImpl implements DropTable{

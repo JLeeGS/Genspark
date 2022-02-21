@@ -16,7 +16,7 @@ public class ActionsImpl implements Actions {
         int movement= Math.abs((int)Math.sqrt(land.getX(selected)^2- x^2) -(land.getY(selected)^2- y^2));
         if(((Humanoid) selected).getSpeed()-movement>=0&!land.isOccupied(x,y)){
             land.getGrid().remove(selected); //old position
-            land.setGrid(selected, newCoords); //new position
+            land.getGrid().put(selected, newCoords); //new position
         }
         else{
             //cannot move, illegal speed
@@ -76,6 +76,35 @@ public class ActionsImpl implements Actions {
         Spell spell=new Spell();
         attacked.setHp(attacked.getHp()- spell.getSpellDamage(cast));
         return attacked.getHp();
+    }
+
+    @Override
+    public boolean canAttack(Humanoid attacker, Humanoid attacked, Land land){
+        //opponent is position getx>=+1 , getx>=+1
+        int xAttacked=land.getX(attacked); int yAttacked=land.getY(attacked);
+        int xAttacker= land.getX(attacker); int yAttacker= land.getY(attacker);
+        if((xAttacked==xAttacker+1)|(yAttacked==yAttacker+1)|(xAttacked==xAttacker-1)|(yAttacked==yAttacker-1)
+                &yAttacked-1!=0&xAttacked-1!=0){ //need to make sure one square apart but not coords 0,0
+            return true;
+        }//System.out.println(xAttacked+" "+yAttacked+"\n "+xAttacker+" "+yAttacked);
+        return false;
+    }
+
+    @Override
+    public void goblinAttack(HashMap<String, Humanoid> attacker, Humanoid attacked, Land land){
+        //AI for attacker
+        int hpold=attacked.getHp();
+        if(canAttack(attacker.entrySet().stream().iterator().next().getValue(), attacked, land)){
+            attack(attacker.entrySet().stream().iterator().next().getValue(),attacked);
+            int hp=attacked.getHp()-hpold;
+            System.out.println(attacker.entrySet().stream().iterator().next().getKey()+" Attacked Human for "+hp+" dmg!");
+        }
+        else{
+            int x=land.getX(attacked)+1;
+            int y=land.getX(attacked);
+            move(land, attacker.entrySet().iterator().next().getValue(), x, y);
+            System.out.println(attacker.entrySet().stream().iterator().next().getKey()+ " is Moving to "+x+" "+y);
+        }
     }
 
 }
