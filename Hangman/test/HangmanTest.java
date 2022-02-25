@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HangmanTest {
 
@@ -37,6 +38,18 @@ public class HangmanTest {
                 "\n" ,//6
                 "\nMissing letters"); //7
         assertEquals(testarrs,HangmanMain.setHanger(7));
+    }
+    @Test
+    void lastHangerFile(){
+        ArrayList<String> testarrs= new ArrayList<String>();
+        Collections.addAll(testarrs,   "+---+",//0
+                " O  |" ,//1
+                "\\|/ |" ,//2
+                " |  |" ,//3
+                "/ \\ |" , //4
+                "   ===" //5
+               ); //6
+        assertEquals(HangmanMain.setHangerFile(7).subList(0,5), testarrs.subList(0,5));
     }
 
     @AfterEach
