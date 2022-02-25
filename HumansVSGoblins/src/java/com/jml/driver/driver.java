@@ -8,6 +8,7 @@ import com.jml.gui.GridMapImpl;
 import com.jml.services.ActionsImpl;
 import com.jml.services.DropTableImpl;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
@@ -191,12 +192,18 @@ public class driver {
         grid.setGridHumanoids(goblins, land);
     }
 
-    public void selectBtn(Humanoid attacker, Humanoid attacked, ActionEvent e){
-        if(e.getSource()==grid.getActionBtn()){
-            humanAttack(attacker, attacked);
-        }
-        else if(e.getSource()==grid.getMoveBtn()){
-            if(actions.canAttack(attacker, attacked, land)){
+    public void playerAction(ActionEvent e, Humanoid attacker, Humanoid attacked, Land land) {
+        GridMapImpl grid=new GridMapImpl();
+        ActionsImpl actions=new ActionsImpl();
+        JButton getBtn= (JButton) e.getSource();
+        if (e.getSource() == grid.buttonClicked(e)) {
+            actions.attack(attacker, attacked);
+            if (e.getSource() == grid.buttonClicked(e)) {
+                if (actions.canAttack(attacker, attacked, land)) {
+                }
+            }
+            else if(e.getSource()==grid.buttonClicked(e)){
+                actions.move(land, attacker, getBtn.getX(), getBtn.getY());
             }
         }
     }

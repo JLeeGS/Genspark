@@ -65,10 +65,11 @@ public class GridMapImpl implements GridMap {
         for(int x=0; x<col; x++){
             for(int y=0; y<row; y++){
                 gridButtons[x][y]=new JButton();
-                gridButtons[x][y].setBounds(60,30,30,30);
-                gridButtons[x][y].setFont(new Font("Arial", Font.BOLD, 120));
+                gridButtons[x][y].setBounds(60,50,50,50);
+                gridButtons[x][y].setFont(new Font("Arial", Font.BOLD, 8));
                 gridButtons[x][y].addActionListener(this::buttonClicked);
                 gridButtons[x][y].setSize(10,10);
+                gridButtons[x][y].setText("("+x+" , "+y+")");
                 buttonPanel.add(gridButtons[x][y]);
             }
         }
@@ -91,7 +92,7 @@ public class GridMapImpl implements GridMap {
 
     @Override
     public void removeFromGridLayout(int x, int y){
-        gridButtons[x][y].setText("");
+        gridButtons[x][y].setText("("+x+" , "+y+")");
     }
 
     @Override
@@ -107,9 +108,26 @@ public class GridMapImpl implements GridMap {
     }
 
     @Override
-    public void buttonClicked(ActionEvent e){
+    public JButton buttonClicked(ActionEvent e){
         JButton btnSelected= (JButton) e.getSource();
-        System.out.println("button clicked: "+ btnSelected.getText());
+        System.out.println(btnSelected.getText());
+        return btnSelected;
     }
 
+    @Override
+    public void playerAction(ActionEvent e, Humanoid attacker, Humanoid attacked, Land land) {
+        GridMapImpl grid=new GridMapImpl();
+        ActionsImpl actions=new ActionsImpl();
+        JButton getBtn= (JButton) e.getSource();
+        if (e.getSource() == grid.buttonClicked(e)) {
+            actions.attack(attacker, attacked);
+            if (e.getSource() == grid.buttonClicked(e)) {
+                if (actions.canAttack(attacker, attacked, land)) {
+                }
+            }
+            else if(e.getSource()==grid.buttonClicked(e)){
+                actions.move(land, attacker, getBtn.getX(), getBtn.getY());
+            }
+        }
+    }
 }

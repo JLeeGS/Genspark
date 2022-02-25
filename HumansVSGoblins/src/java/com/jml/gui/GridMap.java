@@ -18,5 +18,6 @@ public interface GridMap {
     public void removeFromGridLayout(int x, int y);
     public void moveToGridBtn(String name, int x, int y);
     public void setGridHumanoids(HashMap<String, Humanoid> type, Land land);
-    public void buttonClicked(ActionEvent e);
+    public JButton buttonClicked(ActionEvent e);
+    public void playerAction(ActionEvent e, Humanoid attacker, Humanoid attacked, Land land);
 }
