@@ -5,29 +5,28 @@ import com.jml.dao.Human;
 import com.jml.dao.Humanoid;
 import com.jml.dao.Land;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public interface UserInput {
     void handleTeamRemoval();
 
-    //public void choices(HashMap<String, Humanoid> next);
     public void printGrid();
+
+
+    TreeMap<Integer,Land> setUpObjects();
+
+    void handleTurns();
+
     public void setUpGrid();
 
     void addInitiative(int x, int y, Humanoid humanoid);
 
     Humanoid getHumanoidFromInitiativeName(String name);
 
-    Humanoid getHumanoidFromInitiative(Humanoid name);
+    Object getHumanoidType(Humanoid humanoid);
 
     public boolean isDead(Humanoid humanoid);
     public void teamDead();
-    boolean canAttack(Humanoid attacker, Humanoid attacked);
-    public void humanAttack(Humanoid attacker, Humanoid attacked);
-    public void goblinAttack(HashMap<String, Humanoid> attacker, Humanoid attacked);
 
     TreeMap<Integer, Land> getInitiative();
 
@@ -40,7 +39,4 @@ public interface UserInput {
     List<Goblin> getGoblins();
 
     void setGoblins(List<Goblin> goblins);
-
-    public void testGame();
-
 }

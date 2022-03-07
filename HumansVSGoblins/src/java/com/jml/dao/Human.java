@@ -4,10 +4,23 @@ public class Human extends Humanoid {
     private int hp, speed, ac;
     private int strength, dexterity, constitution, intelligence, wisdom, charisma;
     private Inventory inventory;
+    private String name;
     public Human(){
         super();
     }
     public Human(int hp, int speed, int ac, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma){
+        this.hp = hp;
+        this.speed = speed;
+        this.ac = ac;
+        this.strength = strength;
+        this.dexterity = dexterity;
+        this.constitution = constitution;
+        this.intelligence = intelligence;
+        this.wisdom = wisdom;
+        this.charisma = charisma;
+    }
+    public Human(String name,int hp, int speed, int ac, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma){
+        this.name=name;
         this.hp = hp;
         this.speed = speed;
         this.ac = ac;
@@ -30,7 +43,8 @@ public class Human extends Humanoid {
         this.charisma = charisma;
         this.inventory= inventory;
     }
-    public Human(int hp, int ac, int strength){
+    public Human(String name, int hp, int ac, int strength){
+        this.name=name;
         this.hp=hp;
         this.ac=ac;
         this.strength=strength;
@@ -117,5 +131,23 @@ public class Human extends Humanoid {
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString(){
+        return "Name: "+this.name+ " Hp: "+ hp+
+                " Spd: "+ speed+" AC "+ ac+ " Str "+ strength+
+                " Dex: "+ dexterity+" Con: "+ constitution +" Int: " + intelligence +
+                " Wis: "+ wisdom + " Char: "+ charisma;
     }
 }

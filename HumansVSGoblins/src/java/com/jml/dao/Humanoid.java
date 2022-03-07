@@ -1,12 +1,17 @@
 package com.jml.dao;
 
+
+import java.util.Map;
+
 public class Humanoid {
     private int hp, speed, ac;
     private int strength, dexterity, constitution, intelligence, wisdom, charisma;
     private Inventory inventory;
+    private String name;
     public Humanoid(){
         super();
     }
+
     public Humanoid(int hp, int speed, int ac, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma){
         this.hp = hp;
         this.speed = speed;
@@ -18,6 +23,21 @@ public class Humanoid {
         this.wisdom = wisdom;
         this.charisma = charisma;
     }
+    public Humanoid(String name, int hp, int speed, int ac, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma){
+        this.hp = hp;
+        this.speed = speed;
+        this.ac = ac;
+        this.strength = strength;
+        this.dexterity = dexterity;
+        this.constitution = constitution;
+        this.intelligence = intelligence;
+        this.wisdom = wisdom;
+        this.charisma = charisma;
+    }
+
+    public String getName(){return name;}
+
+    public void setName(String name){this.name=name;}
 
     public Humanoid(Inventory inventory){
         this.inventory= inventory;

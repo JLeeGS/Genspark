@@ -1,6 +1,9 @@
 package com.jml.services;
 
 import com.jml.dao.*;
+import com.jml.gui.GridMapImpl;
+
+import javax.swing.*;
 import java.util.*;
 
 public class ActionsImpl implements Actions {
@@ -8,44 +11,53 @@ public class ActionsImpl implements Actions {
         super();
     }
 
+//    @Override
+//    public String move(Land land, Object selected, int x, int y) {
+//        HashMap<Object,TreeMap<Integer,Integer>> willMove = land.getGrid();
+//        TreeMap<Integer,Integer> newCoords= land.setCoords(x,y);
+//
+//        int movement= Math.abs((int)Math.sqrt(land.getX(selected)^2- x^2) -(land.getY(selected)^2- y^2));
+//        if(((Humanoid) selected).getSpeed()-movement>=0&!land.isOccupied(x,y)){
+//            land.getGrid().remove(selected); //old position
+//            land.getGrid().put(selected, newCoords); //new position
+//        }
+//        return "Moved to X: "+x+" Y: "+y;
+//    }
     @Override
-    public void move(Land land, Object selected, int x, int y) {
-        HashMap<Object,TreeMap<Integer,Integer>> willMove = land.getGrid();
-        TreeMap<Integer,Integer> newCoords= land.setCoords(x,y);
-
-        int movement= Math.abs((int)Math.sqrt(land.getX(selected)^2- x^2) -(land.getY(selected)^2- y^2));
-        if(((Humanoid) selected).getSpeed()-movement>=0&!land.isOccupied(x,y)){
-            land.getGrid().remove(selected); //old position
-            land.getGrid().put(selected, newCoords); //new position
+    public boolean canMove(Land selected, int x, int y) {
+        GridMapImpl grid=new GridMapImpl();Land land=new Land();JButton[][] gridBtns=grid.getGridButtons();
+        int movement= Math.abs((int)Math.sqrt(selected.getX()^2- x^2) -(selected.getY()^2- y^2));
+        if(selected.getHumanoid().getSpeed()-movement>=0&(gridBtns[x][y].getText()!=gridBtns[x][y].getName())){ //if can move and not occupied
+            return true;
         }
-        else{
-            //cannot move, illegal speed
-        }
+        return false;
     }
 
     @Override
-    public int attack(Humanoid attacker, Humanoid attacked) {
+    public String attack(Humanoid attacker, Humanoid attacked) {
+        String outcome="";
         int roll=(int)(Math.random()*19+1);int mod=(attacker.getStrength()/3);int total=roll+mod;
         if(roll==20){
             attacked.setHp((attacked.getHp() - mod*2));
-            System.out.println("NAT 20! Rolled: "+total+"+ You Dealt"+mod*2+" dmg");
+            outcome="NAT 20! Rolled: "+total+"+ You Dealt"+mod*2+" dmg";
         }
         else if(total>10&attacked.getAc()<total){
             //goes to defender for AC
             attacked.setHp(attacked.getHp() - mod);
-            System.out.println("You rolled: "+total+" and dealt "+mod+" dmg");
+            outcome="You rolled: "+total+" and dealt "+mod+" dmg";
         }
         else if(roll==1){
             attacker.setHp(attacker.getHp()-1);
-            System.out.println("NAT 1! rolled: "+total+" YOU TAKE 1 dmg");
+            outcome="NAT 1! rolled: "+total+" YOU TAKE 1 dmg";
         }
         else{
             System.out.println("You rolled: "+total+ " You Missed!");
             if(attacked.getAc()<total){
-               System.out.print("AC is higher, Enemy Defended!");
+               outcome="AC is higher, Enemy Defended!";
             }
         }
-        return attacked.getHp();
+        System.out.println(outcome);
+        return outcome;
     }
 
     @Override
@@ -79,10 +91,10 @@ public class ActionsImpl implements Actions {
     }
 
     @Override
-    public boolean canAttack(Humanoid attacker, Humanoid attacked, Land land){
+    public boolean canAttack(Land attacker, Land attacked){
         //opponent is position getx>=+1 , getx>=+1
-        int xAttacked=land.getX(attacked); int yAttacked=land.getY(attacked);
-        int xAttacker= land.getX(attacker); int yAttacker= land.getY(attacker);
+        int xAttacked=attacked.getX(); int yAttacked=attacked.getY();
+        int xAttacker=attacked.getX(); int yAttacker= attacked.getY();
         if((xAttacked==xAttacker+1)|(yAttacked==yAttacker+1)|(xAttacked==xAttacker-1)|(yAttacked==yAttacker-1)
                 &yAttacked-1!=0&xAttacked-1!=0){ //need to make sure one square apart but not coords 0,0
             return true;
@@ -91,20 +103,20 @@ public class ActionsImpl implements Actions {
     }
 
     @Override
-    public void goblinAttack(HashMap<String, Humanoid> attacker, Humanoid attacked, Land land){
+    public void goblinAttack(Land attacker, Land attacked){
         //AI for attacker
-        int hpold=attacked.getHp();
-        if(canAttack(attacker.entrySet().stream().iterator().next().getValue(), attacked, land)){
-            attack(attacker.entrySet().stream().iterator().next().getValue(),attacked);
-            int hp=attacked.getHp()-hpold;
-            System.out.println(attacker.entrySet().stream().iterator().next().getKey()+" Attacked Human for "+hp+" dmg!");
+        Land land=new Land();
+        int hpold=attacked.getHumanoid().getHp();
+        if(canAttack(attacker, attacked)){
+            attack(attacker.getHumanoid(),attacked.getHumanoid());
+            int hp=attacked.getHumanoid().getHp()-hpold;
+            System.out.println(attacker.getHumanoid().getName()+" Attacked Human for "+hp+" dmg!");
         }
         else{
             int x=land.getX(attacked)+1;
             int y=land.getX(attacked);
-            move(land, attacker.entrySet().iterator().next().getValue(), x, y);
-            System.out.println(attacker.entrySet().stream().iterator().next().getKey()+ " is Moving to "+x+" "+y);
+            canMove(attacker, x, y);
+            System.out.println(attacker.getHumanoid().getName()+ " Is Moving to ("+x+","+y+")");
         }
     }
-
 }

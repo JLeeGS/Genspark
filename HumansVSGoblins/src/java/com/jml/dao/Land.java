@@ -2,15 +2,34 @@ package com.jml.dao;
 
 import java.util.*;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.regex.*;
 
 public class Land {
     private HashMap<Object,TreeMap<Integer,Integer>> grid;
     public Land land;
     public Land(){
         super();
+    }
+    private TreeMap<Integer,Integer> coords;
+    private Humanoid humanoid;
+    private int x=0,y=0;
+
+    public int getX() {
+        return x;
+    }public void setX(int x) {
+        this.x = x;
+    }
+    public int getY() { return y;} public void setY(int y) { this.y=y;}
+    public Humanoid getHumanoid() {
+        return humanoid;
+    }
+    public void setHumanoid(Humanoid humanoid) {
+        this.humanoid = humanoid;
+    }
+
+    public Land (int x, int y, Humanoid humanoid){
+        this.x=x;
+        this.y=y;
+        this.humanoid=humanoid;
     }
 
     public TreeMap<Integer,Integer> setCoords(int x, int y){
@@ -26,6 +45,11 @@ public class Land {
         TreeMap<Integer,Integer> coords=new TreeMap<Integer,Integer>();
         coords.put(xaxis,yaxis);
         return getGrid().values().contains(coords);
+    }
+
+    public Humanoid getHumanoid(TreeMap<Integer,Integer> coords){
+        Humanoid hu= (Humanoid) getGrid().entrySet().stream().map(e->e.getKey()).findFirst().get();
+        return hu;
     }
 
     public int getX(Object obj){
@@ -133,4 +157,19 @@ public class Land {
 //            }
         }
     }
+
+    public TreeMap<Integer, Integer> getCoords() {
+        return coords;
+    }
+
+    public void setCoords(TreeMap<Integer, Integer> coords) {
+        this.coords = coords;
+    }
+
+    @Override
+    public String toString(){
+        return "Coordinates: X:"+this.x+" Y: "+this.y+
+                "\n"+ "Humanoid: "+this.humanoid;
+    }
+
 }
