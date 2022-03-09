@@ -1,7 +1,7 @@
-package com.genspark.springbootPractice.Controller;
+package com.genspark.springbootPractice.controllers;
 
-import com.genspark.springbootPractice.DAO.Employee;
-import com.genspark.springbootPractice.Service.EmployeeService;
+import com.genspark.springbootPractice.models.Employee;
+import com.genspark.springbootPractice.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 public class EmployeeController {
+
     @Autowired
     private EmployeeService employeeService;
 
@@ -22,9 +23,9 @@ public class EmployeeController {
         return employeeService.getListofEmployees();
     }
 
-    @GetMapping("/employees/{employeeId}")
-    public Employee getEmployeeFromId(@PathVariable String employeeId){
-        return this.employeeService.getEmployee(Long.parseLong(employeeId));
+    @GetMapping("/employees/{id}")
+    public Employee getEmployeeFromId(@PathVariable String id){
+        return this.employeeService.getEmployee(Long.parseLong(id));
     }
     @PostMapping("/employees")
     public Employee addEmployee(@RequestBody Employee employee){
@@ -34,6 +35,6 @@ public class EmployeeController {
     @PutMapping("/employees")
     public Employee updateEmployee(@RequestBody Employee employee){return this.employeeService.addEmployee(employee);}
 
-    @DeleteMapping("/employees/{employeeId}")
-    public String deleteEmployee(@PathVariable String employeeId){return this.employeeService.deleteEmployee(Long.parseLong(employeeId));}
+    @DeleteMapping("/employees/{id}")
+    public String deleteEmployee(@PathVariable String id){return this.employeeService.deleteEmployee(Long.parseLong(id));}
 }
