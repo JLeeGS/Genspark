@@ -103,20 +103,23 @@ public class ActionsImpl implements Actions {
     }
 
     @Override
-    public void goblinAttack(Land attacker, Land attacked){
+    public String goblinAttack(Land attacker, Land attacked){
         //AI for attacker
-        Land land=new Land();
+        String notify="";
         int hpold=attacked.getHumanoid().getHp();
         if(canAttack(attacker, attacked)){
             attack(attacker.getHumanoid(),attacked.getHumanoid());
             int hp=attacked.getHumanoid().getHp()-hpold;
-            System.out.println(attacker.getHumanoid().getName()+" Attacked Human for "+hp+" dmg!");
+            notify=attacker.getHumanoid().getName()+" Attacked Human for "+hp+" dmg!";
+            System.out.println(notify);
         }
         else{
-            int x=land.getX(attacked)+1;
-            int y=land.getX(attacked);
+            int x=attacked.getX(attacked)+1;
+            int y=attacked.getY(attacked);
             canMove(attacker, x, y);
-            System.out.println(attacker.getHumanoid().getName()+ " Is Moving to ("+x+","+y+")");
+            notify=attacker.getHumanoid().getName()+ " Is Moving to ("+x+","+y+")";
+            System.out.println(notify);
         }
+        return notify;
     }
 }

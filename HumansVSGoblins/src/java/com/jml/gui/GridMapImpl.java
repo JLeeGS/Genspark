@@ -8,9 +8,9 @@ import com.jml.services.ActionsImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GridMapImpl implements GridMap {
     private JButton attackBtn= new JButton();
@@ -62,6 +62,8 @@ public class GridMapImpl implements GridMap {
         JPanel notifyPanel= new JPanel();
         JLabel titleField= new JLabel();
 
+        JScrollPane scroll;
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500,500);
         frame.setBackground(Color.blue);
@@ -109,9 +111,12 @@ public class GridMapImpl implements GridMap {
         notifyPanel.setLayout(new GridLayout(1, 1));
         notifyPanel.setBackground(new Color(100,100,100));
         notifyPanel.setBounds(0,0, 800,800);
-        notifyPanel.add(notifyText);
+        notifyText.setBounds(0,0,50,20);
         notifyText.setText("Welcome!");
-        frame.add(notifyPanel);
+        notifyText.setEditable(false);
+        scroll = new JScrollPane(notifyText);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        frame.add(scroll);
     }
 
     @Override
@@ -170,42 +175,69 @@ public class GridMapImpl implements GridMap {
         JButton btn= (JButton) e.getSource();UserInput userInput=new UserInputImpl();
         ActionsImpl actions= new ActionsImpl();
         LinkedHashMap<Integer,Land> queue=new LinkedHashMap<>(); queue.putAll(gameInitiative);
-        Land turn = gameInitiative.entrySet().stream().iterator().next().getValue();
-           // System.out.println(userInput.getHumanoidType(turn.getHumanoid()));
-            if(gameInitiative.entrySet().stream().anyMatch(x->x.getValue().getHumanoid().getClass().equals(Goblin.class))){
-                System.out.println("Goblins still remaining");
-                //if teamdead then notify and lock menu
+        Land turn = null;
+        Set<Humanoid> humanoidSet=gameInitiative.entrySet().stream().map(Map.Entry::getValue).map(x->x.getHumanoid()).collect(Collectors.toSet());
+            Set<Land> landSet=gameInitiative.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toSet());
+                List<Land> humanList=landSet.stream().filter(x->x.getHumanoid().getClass().equals(Human.class)).collect(Collectors.toList());
+            boolean humansAlive = humanoidSet.stream().anyMatch(x -> x.getClass().equals(Human.class));
+            boolean goblinsAlive = humanoidSet.stream().anyMatch(x -> x.getClass().equals(Goblin.class));
+            if (humansAlive & !goblinsAlive) {
+                System.out.println("Victory! Humans win!");
+            } else if (goblinsAlive & !humansAlive) {
+                System.out.println("Defeat! Goblins win!");
+            } else if (humanoidSet.isEmpty()) {
+                System.out.println("DRAW Both Humans and Goblins are dead!");
             }
-            else if(gameInitiative.entrySet().stream().anyMatch(x->x.getValue().getHumanoid().getClass().equals(Human.class))){
-                System.out.println("Humans still remaining");
-            }
+            turn = gameInitiative.entrySet().stream().iterator().next().getValue();
+//                if (turn.getHumanoid().getClass().equals(Goblin.class)) {
+//                    Land poorHuman = humanList.get((int) (Math.random() % humanList.size()));
+//                    actions.goblinAttack(turn, poorHuman);
+//                    String notify = turn.getHumanoid().getName() + " Attempting to attack... " + poorHuman.getHumanoid().getName();
+//                    System.out.println(notify);
+//                    notifyText.append("\n" + notify);
+//                }
+
             if (btn.equals(getActionBtn())) {
                 try {
-                    Humanoid attacked = getHumanoidSelected(Integer.parseInt(coordInputX.getText()), Integer.parseInt(coordInputY.getText()));
-                    String notify=turn.getHumanoid().getName() + " Attacking... " + attacked.getName(); System.out.println(notify); notifyText.append("\n"+notify);
+                    int coordsX = Integer.parseInt(coordInputX.getText());
+                    int coordsY = Integer.parseInt(coordInputY.getText());
+                    Humanoid attacked = getHumanoidSelected(coordsX, coordsY);
+                    String notify = turn.getHumanoid().getName() + " Attacking... " + attacked.getName();
+                    System.out.println(notify);
+                    notifyText.append("\n" + notify);
                     actions.attack(turn.getHumanoid(), attacked);
-                    if(attacked.getHp()<=0){
+                    if (attacked.getHp() <= 0) {
+                        getGridButtons()[coordsX][coordsY].setText("(" + coordsX + " , " + coordsY + ")");
                         gameInitiative.remove(turn);
+                        gameInitiative.remove(attacked);
+                    } else if (turn.getHumanoid().getHp() <= 0) {
+                        getGridButtons()[turn.getX()][turn.getY()].setText("(" + turn.getX() + " , " + turn.getY() + ")");
+                        gameInitiative.remove(turn);
+                        gameInitiative.remove(attacked);
                     }
                 } catch (Exception noHumanoidHere) {
-                    String notify="No Humanoid at: (" + coordInputX.getText() + "," + coordInputY.getText() + ")";
-                    System.out.println(notify); notifyText.append("\n"+notify);
+                    String notify = "No Humanoid at: (" + coordInputX.getText() + "," + coordInputY.getText() + ")";
+                    System.out.println(notify);
+                    notifyText.append("\n" + notify);
                 }
             } else if (btn.equals(getMoveBtn())) {
                 try {
-                    String notify="Moving From: ("+turn.getX()+","+turn.getY()+") To:("+coordInputX.getText() + "," + coordInputY.getText()+")...";
-                    System.out.println(notify); notifyText.append("\n"+notify);
-                    if(actions.canMove(turn,Integer.parseInt(coordInputX.getText()), Integer.parseInt(coordInputY.getText()))){
+                    String notify = "Moving From: (" + turn.getX() + "," + turn.getY() + ") To:(" + coordInputX.getText() + "," + coordInputY.getText() + ")...";
+                    System.out.println(notify);
+                    notifyText.append("\n" + notify);
+                    if (actions.canMove(turn, Integer.parseInt(coordInputX.getText()), Integer.parseInt(coordInputY.getText()))) {
                         removeFromGridLayout(turn.getX(), turn.getY());//old position remove
                         setGridLayout(turn.getHumanoid().getName(), turn.getX(), turn.getY());//new position place
-                        gameInitiative.remove(turn);//remove from initiative
-                        //btnGrid.settext
+                        gameInitiative.remove(turn);
+                        getGridButtons()[turn.getX()][turn.getY()].setText(turn.getHumanoid().getName());
                     }
                 } catch (Exception moveFailed) {
-
+                    String notify = "Cannot Move!";
                 }
             }
+
         queue.entrySet().stream().forEach(m->{System.out.println(m.getKey()+" "+m.getValue().getHumanoid().getName());});
+        //turnInititive.forEach(t->{System.out.println(t.getKey()+" "+t.getValue().getHumanoid().getName());});
     }
 
     public void getGui(){

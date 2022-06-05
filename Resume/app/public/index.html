@@ -1,0 +1,95 @@
+ <!DOCTYPE html>
+ <!--Skills-->
+<html>
+    <head> 
+        <meta charset="utf-8" />
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="react app"/>
+        <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Janine Lee's Resume</title>
+    </head>
+        <body>
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+            <div id="HeaderComponent"></div>
+                <div id="nav-bar" class="container">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <a class="navbar-brand" href="#"></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                        <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://gitlab.com/Tekling">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact Me</a>
+                        </li>
+                        </ul>
+                        <span class="navbar-text">
+                        </span>
+                    </div>
+                    </nav>
+                </div>
+                <div class="container-bg">
+                    <div id="profile-skill-row" class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-3"><div id="profile_img"><img src="%PUBLIC_URL%/IMG_20220122_102359.jpg" class="img-fluid" alt="face_img"></div></div>
+                            <div id="tech-skills">
+                                <ul class="skills">
+                                    <li><a>Data technologies:</a> SQL, XML, JSON, AJAX, REST/SOAP Web Services</li>
+                                    <li><a>Server Side:</a> Java, Hibernate, Spring Core, Spring MVC, Spring AOP, Spring Boot, Spring Framework </li>
+                                    <li><a>Front End:</a> HTML 5, CSS, Bootstrap, Javascript, React</li>
+                                    <li><a>Dev Ops:</a> STS, Maven, Jenkins, Git, Github/Gitlab, Amazon RDS, Amazon EC2, GCP, Tomcat, Heroku</li>
+                                    <li><a>Other: </a>Microsoft Teams, Visual Studio, ASP, Adobe Photoshop, PC, Mac, iOS, Android, Microsoft Excel</li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="projects" class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                        <h4 style="padding-bottom: 20px;">Projects</h4>
+                        <dl>
+                            <dt>Employee Management System</dt>
+                            <dd>Designed a Spring Boot Web Application to manage Employees</dd>
+                        </dl>
+                        <dl>
+                            <dt>HumansVSGoblins</dt>
+                            <dd>Created a Java Swing GUI, turn based game with Humans and Goblins in a grid and a inventory system</dd>
+                        </dl>
+                        <dl>
+                            <dt>BoardingPass</dt>
+                            <dd>Generated an Ticket based on user input of a Java Swing GUI and Google API</dd>
+                        </dl>
+                        <dl>
+                            <dt>NumbersToWordsConverted</dt>
+                            <dd>Converted a list of random named numbers into numbers and ordered them</dd>
+                        </dl>
+                        <dl>
+                            <dt>DiscordJobsBot</dt>
+                            <dd>A Discord Bot that grabs jobs off on Indeed based on user's inputed desired job and location</dd>
+                        </dl>
+                        </div>
+                        
+                        <div id="skills-used" class="col-sm-3"></div>
+                    </div>
+                </div>
+
+            <div id="contact"></div>
+            <!-- <div id="root"></div> -->
+        </body> 
+</html> 

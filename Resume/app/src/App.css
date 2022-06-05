@@ -1,0 +1,74 @@
+
+body{
+  background-color: #000; color:  #f2f2f2;
+}
+
+.container-bg{
+  background-color: #000; color:  #f2f2f2;
+}
+
+.navbar{
+  border-radius: 10px;
+}
+
+#img_profile{
+  padding: 20px;
+}
+
+.img-fluid{
+  scale:80%;  border-radius: 5%;
+}
+
+#HeaderComponent{ 
+  padding-bottom: 30px; padding-top: 100px; color:  #ffad33;
+}
+
+#nav-bar{
+  padding-bottom: 20px; color:  #ffad33;
+}
+
+#tech-skills ul.skills li a{ 
+  padding-left: 10px; color:  #ffad33;
+}
+
+#tech-skills ul.skills>li{ 
+  padding-left: 10px;
+  padding-bottom: 20px;
+}
+
+ul.skills {
+  list-style: none;
+}
+
+#tech-skills{
+  padding-top: 100px;
+}
+
+#projects{
+  padding-top: 300px;
+}
+
+#projects dl dt{
+  color:rgb(156, 220, 250);
+}
+
+#contact{
+  padding-top: 300px; padding-bottom: 50px;
+}
+
+#contact li{
+  list-style: none; padding-bottom: 10px;
+}
+
+#contact-info{
+  padding-left: 0;
+}
+
+#contact h4{
+  padding-top: 0px; padding-bottom: 20px;
+}
+
+.App {
+  text-align: center;
+}
+

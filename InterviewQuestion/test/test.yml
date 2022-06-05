@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  tomcat:
+    image: tekling/tomcat10jdk17:latest
+    ports:
+      - 8000:8080
+    command:
+      - yq -Y '<Valve className="org.apache.catalina.valves.RemoteAddrValve"allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> |= "<!--<Valve className="org.apache.catalina.valves.RemoteAddrValve"allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />-->"' ~/context.xml
+      - yq -Y '<max-file-size>52428800</max-file-size>|= "<max-file-size>134217728</max-file-size>"' webapps/manager/WEB-INF/web.xml
+      - yq -Y '</tomcat-users> |= ""' conf/tomcat-users.xml
+      - printf "<role rolename="manager-gui"/>\n<role rolename="manager-script"/>\n<user username="manager-gui" password="tomcat" roles="manager-gui"/>\n<user username="manager-script" password="script" roles="manager-script"/>\n</tomcat-users>" >> conf/tomcat-users.xml
+  jenkins:
+    image: tekling/jenkins-git-maven3.8.5:latest
+    ports:
+      - 8020:8090

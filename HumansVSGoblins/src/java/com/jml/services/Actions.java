@@ -19,5 +19,5 @@ public interface Actions {
     public String spell(String type);
     public int cast(Humanoid attacked, Humanoid attacker, String spell);
     public boolean canAttack(Land attacker, Land attacked);
-    public void goblinAttack(Land attacker, Land attacked);
+    public String goblinAttack(Land attacker, Land attacked);
 }
